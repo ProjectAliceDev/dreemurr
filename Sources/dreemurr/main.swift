@@ -8,17 +8,51 @@
 
 import Sword
 
-let bot = Sword(token: "NTg5NTc2MzMxNzA0OTI2MjA4.XQVr7Q.K-8iW0luEhpqbnjczF2JFxD1g-M")
+print("""
+Project Dreemurr
+v1.0.0
+(C) 2019 Project Alice. All rights reserved.
+""")
 
-bot.editStatus(to: "online", playing: "Portal 2")
-
-bot.on(.messageCreate) { data in
-    let msg = data as! Message
-    
-    if msg.content == "!ping" {
-        msg.reply(with: "EXCUSE ME?!")
-    }
+let testString = """
+{
+\"token\": \"NTg5NTc2MzMxNzA0OTI2MjA4.XQVr7Q.K-8iW0luEhpqbnjczF2JFxD1g-M\",
+\"currentGame\": \"Undertale\",
+\"name\": \"Asriel\"
 }
+"""
 
-bot.connect()
+print("Received JSON input: \(testString)")
+print("Attempting to create a new soul from this determination...")
 
+let newSoul = Determination(fromJson: testString)
+
+if newSoul != nil {
+    print("Soul creation from determination successful.")
+    print("Attempting to create a new Dreemurr class...")
+    let asriel = Dreemurr(determinedFrom: newSoul!)
+    asriel.onWatchMessages(doThis: {data in
+        let message = data as! Message
+        
+        if message.content.starts(with: "!") {
+            do {
+                switch try asriel.toDreemurrCommand(command: message.content) {
+                case .introduce:
+                    message.reply(with: asriel.introduceSelf())
+                case .ping:
+                    message.reply(with: "Pong.")
+                case .help:
+                    message.reply(with: asriel.showHelp(description: nil))
+                }
+            } catch {
+                message.reply(with: """
+                    **Error:** The command `\(message.content)` is invalid or cannot be parsed.
+                    _Is this a bug?_ File an issue: https://github.com/ProjectAliceDev/dreemurr
+                    """)
+            }
+        }
+    })
+    asriel.connect()
+} else {
+    print("Error! This determination is broken and cannot be used.\nAborting...")
+}
