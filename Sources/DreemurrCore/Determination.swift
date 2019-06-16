@@ -17,11 +17,11 @@ public struct Determination: DeterminationProtocol {
     var name: String
 }
 
-protocol DeterminationProtocol : Codable {
+public protocol DeterminationProtocol : Codable {
     init?(fromJson: String)
 }
 
-extension DeterminationProtocol {
+public extension DeterminationProtocol {
     init?(fromJson: String) {
         guard let data = fromJson.data(using: .utf8) else {
             return nil
