@@ -8,6 +8,9 @@
 
 import Foundation
 
+/**
+    Struct containing configuration information such as the access token, name, etc.
+ */
 public struct Determination: DeterminationProtocol {
     var token: String
     var currentGame: String

@@ -19,12 +19,40 @@ public class Dreemurr {
     private var determination: Determination
     private var soul: Sword
     
-    // MARK: Methods
+    // MARK: Methods - Tokenizers
+    /**
+        Converts a given string into a parseable token used for command processing.
+     
+        This function accepts an additional lexer that can tokenize any new tokens that don't exist in the base `DreemurrCommands` enumeration. When this option is provided, it will run the additional lexer instead of the base lexer, `toDreemurrCommand`.
+     
+        - Important: The additional lexer should account for any base `DreemurrCommands` enumeration cases: `.ping`, `.introduce`, and `.help`.
+     
+        - parameter input: The input to tokenize.
+        - parameter additionalLexer: (Optional) Any additional lexers to run.
+     */
+    public func tokenize(_ input: String, additionalLexer: ((String) throws -> (DreemurrCommands))?) throws -> DreemurrCommands {
+        if (additionalLexer != nil) {
+            do {
+                return try additionalLexer!(input)
+            } catch {
+                throw DreemurrError.invalidCommand
+            }
+        } else {
+            do {
+                return try toDreemurrCommand(command: input)
+            } catch {
+                throw DreemurrError.invalidCommand
+            }
+            
+        }
+    }
     
     /**
         Convert a string into a parseable command.
      
-        This should apply to the basic Dreemurr commands available and may need an additional lexer from another source if extended.
+        This should apply to the basic Dreemurr commands available.
+     
+        - Important: If you need to tokenize other commands, use the `tokenize` function instead.
         - parameter command: The command to parse from
      */
     public func toDreemurrCommand(command: String) throws -> DreemurrCommands {
@@ -33,9 +61,20 @@ public class Dreemurr {
             return .ping
         case "!introduce":
             return .introduce
+        case "!help":
+            return .help
         default:
             throw DreemurrError.invalidCommand
         }
+    }
+    
+    // MARK: Methods - Discord Processing
+    /**
+        Runs a command when a new member joins the server.
+        - parameter doThis: The function to run, typically a command that welcomes the new user.
+     */
+    public func onNewMemberAdded(doThis: ((Any) -> ())) {
+        soul.on(.guildMemberAdd, do: doThis)
     }
     
     /**
@@ -53,17 +92,21 @@ public class Dreemurr {
         soul.connect()
     }
     
+    // MARK: Methods - Bot Info
     /**
         Creates and embed of the bot's information.
         - returns: An `Embed` containing the bot's information
      */
     public func introduceSelf() -> Embed {
         var selfIntroduction = Embed()
-        selfIntroduction.title = "About \(determination.name) (A Project Dreemurr-based bot)"
+        selfIntroduction.color = 0x5c578e
+        selfIntroduction.title = "About Me"
         selfIntroduction.description = """
+        **\(self.determination.name)**
         Dreemurr Version: v1.0.0
         
         (C) 2019 Project Alice. All rights reserved.
+        GitHub: https://github.com/projectalicedev/dreemurr
         """
         return selfIntroduction
     }
@@ -75,11 +118,13 @@ public class Dreemurr {
      */
     public func showHelp(description: String?) -> Embed {
         var help = Embed()
+        help.color = 0x5c578e
         help.title = "Help"
         help.description = description != nil ? description: """
-        !ping - Pings the bot
-        !introduce - Provides information about this screen.
-        !help - Shows this screen.
+        **Base Commands**
+        - !ping - Pings the bot
+        - !introduce - Provides information about this screen.
+        - !help - Shows this screen.
         """
         return help
     }
