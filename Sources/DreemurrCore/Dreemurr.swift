@@ -135,7 +135,7 @@ public struct Dreemurr {
         Constructs the `Dreemurr` class.
         - parameter determinedFrom: The configuration to build from.
      */
-    init(determinedFrom: Determination) {
+    public init(determinedFrom: Determination) {
         determination = determinedFrom
         soul = Sword(token: determination.token)
     }
