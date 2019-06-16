@@ -1,7 +1,7 @@
 import XCTest
 
-import dreemurrTests
+import DreemurrCoreTests
 
 var tests = [XCTestCaseEntry]()
-tests += dreemurrTests.allTests()
+tests += DreemurrCoreTests.allTests()
 XCTMain(tests)

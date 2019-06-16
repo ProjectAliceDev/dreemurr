@@ -12,7 +12,7 @@ import Sword
 /**
     Class for connecting to Discord and watching for key events.
  */
-public class Dreemurr {
+public struct Dreemurr {
     
     // MARK: Properties
     
@@ -73,7 +73,7 @@ public class Dreemurr {
         Runs a command when a new member joins the server.
         - parameter doThis: The function to run, typically a command that welcomes the new user.
      */
-    public func onNewMemberAdded(doThis: ((Any) -> ())) {
+    public func onNewMemberAdded(doThis: @escaping ((Any) -> ())) {
         soul.on(.guildMemberAdd, do: doThis)
     }
     
