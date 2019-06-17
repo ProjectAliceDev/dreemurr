@@ -12,7 +12,7 @@ import Sword
 /**
     Class for connecting to Discord and watching for key events.
  */
-public class Dreemurr {
+open class Dreemurr {
     
     // MARK: Properties
     
