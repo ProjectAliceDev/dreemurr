@@ -89,6 +89,7 @@ open class Dreemurr {
         Connect to the Discord service and start listening.
      */
     public func connect() {
+        soul.editStatus(to: "Online", playing: determination.currentGame)
         soul.connect()
     }
     
