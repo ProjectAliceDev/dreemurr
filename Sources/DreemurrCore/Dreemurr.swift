@@ -68,7 +68,27 @@ open class Dreemurr {
         }
     }
     
-    // MARK: Methods - Discord Processing
+    /**
+        Get the command's arguments, if any, as an array.
+     
+        - Important: This function splits the string by the _space_ character (`" "`) . If your command requires arguments when processing, keep this in mind.
+     
+        - parameter command: The command to dissect into its arguments.
+        - parameter includeCommand: (Optional) Whether the original command should be included in the array.
+        - returns: An array of `Substring` containing all of the arguments
+     */
+    public func asArguments(command: String, includeCommand: Bool?) -> [Substring] {
+        var args = command.split(separator: " ")
+        
+        if (!includeCommand) {
+            args.removeFirst()
+
+        }
+        
+        return args
+    }
+    
+    // MARK: Methods - Processing
     /**
         Runs a command when a new member joins the server.
         - parameter doThis: The function to run, typically a command that welcomes the new user.
@@ -128,6 +148,35 @@ open class Dreemurr {
         - !help - Shows this screen.
         """
         return help
+    }
+    
+    // MARK: Methods - Messaging
+    
+    /**
+        Send a message to a user.
+        - parameter to: The user object to send to (`Snowflake`)
+        - parameter content: The message to send to the user (`[String: Any]`)
+     */
+    public func sendMessage(to: Snowflake, content: [String: Any]) {
+        soul.send(content: content, to: to)
+    }
+    
+    /**
+     Send a message to a user.
+     - parameter to: The user object to send to (`Snowflake`)
+     - parameter content: The message to send to the user (`Embed`)
+     */
+    public func sendMessage(to: Snowflake, content: Embed) {
+        soul.send(content: content, to: to)
+    }
+    
+    /**
+     Send a message to a user.
+     - parameter to: The user object to send to (`Snowflake`)
+     - parameter content: The message to send to the user (`String`)
+     */
+    public func sendMessage(to: Snowflake, content: String) {
+        soul.send(content: content, to: to)
     }
     
     // MARK: Constructor
