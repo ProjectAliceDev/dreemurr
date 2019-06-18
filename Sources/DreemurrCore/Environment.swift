@@ -16,30 +16,35 @@ public struct DreemurrEnvironment {
     /**
         Get the token from environment variables.
      */
-    public static func getDreemurrToken() -> String {
+    public static func getDreemurrToken() -> String? {
         return ProcessInfo.processInfo.environment["dreemurr.token"]
     }
     
     /**
         Get the name of the bot from environment variables.
      */
-    public static func getDreemurrName() -> String {
+    public static func getDreemurrName() -> String? {
         return ProcessInfo.processInfo.environment["dreemurr.name"]
     }
     
     /**
         Get the name of the current game they are playing from environment variables.
      */
-    public static func getDreemurrCurrentGame() -> String {
+    public static func getDreemurrCurrentGame() -> String? {
         return ProcessInfo.processInfo.environment["dreemurr.currentGame"]
     }
     
-    public static func createEnvironmentVariablesAsDecodableJSON() -> String {
+    /**
+        Create a string containing the JSON format of the environment variables.
+        - parameter nameDefaultsTo: The name that should be the fallback if `dreemurr.name` is missing.
+        - parameter gameDefaultsTo: The name of the game that should be the fallback if `dreemurr.currentGame` is missing.
+     */
+    public static func createEnvironmentVariablesAsDecodableJSON(nameDefaultsTo: String, gameDefaultsTo: String) -> String {
         return """
         {
-        \"name\": \"\(getDreemurrName())\",
-        \"token\": \"\(getDreemurrToken())\",
-        \"currentGame\":\"\(getDreemurrCurrentGame())\"
+        \"name\": \"\(getDreemurrName() ?? nameDefaultsTo)\",
+        \"token\": \"\(getDreemurrToken() ?? "invalidtoken")\",
+        \"currentGame\":\"\(getDreemurrCurrentGame() ?? gameDefaultsTo)\"
         }
         """
     }
