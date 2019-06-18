@@ -80,7 +80,7 @@ open class Dreemurr {
     public func asArguments(command: String, includeCommand: Bool?) -> [Substring] {
         var args = command.split(separator: " ")
         
-        if (!includeCommand) {
+        if (includeCommand == nil || !includeCommand!) {
             args.removeFirst()
 
         }
@@ -158,7 +158,7 @@ open class Dreemurr {
         - parameter content: The message to send to the user (`[String: Any]`)
      */
     public func sendMessage(to: Snowflake, content: [String: Any]) {
-        soul.send(content: content, to: to)
+        soul.send(content, to: to)
     }
     
     /**
@@ -167,7 +167,7 @@ open class Dreemurr {
      - parameter content: The message to send to the user (`Embed`)
      */
     public func sendMessage(to: Snowflake, content: Embed) {
-        soul.send(content: content, to: to)
+        soul.send(content, to: to)
     }
     
     /**
@@ -176,7 +176,7 @@ open class Dreemurr {
      - parameter content: The message to send to the user (`String`)
      */
     public func sendMessage(to: Snowflake, content: String) {
-        soul.send(content: content, to: to)
+        soul.send(content, to: to)
     }
     
     // MARK: Constructor
